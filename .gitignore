@@ -1,0 +1,19 @@
+# Ignore compiled Python bytecode files
+*.pyc
+
+# Ignore Python cache directories
+__pycache__/
+
+# Ignore environment-specific settings
+.env
+
+# Ignore virtual enviroment
+virtu
+
+# Ignore key to access oatuh api google
+keys/
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+*.sublime-*
