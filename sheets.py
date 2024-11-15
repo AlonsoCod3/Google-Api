@@ -1,8 +1,10 @@
+import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from parent_config import SHEET_SCOPE as SCOPE
+from functions import probando
 
-SCOPE = ["https://www.googleapis.com/auth/spreadsheets"]
-DOCUMENT_ID = "10-XhAKVGEbLTzjN-KDNc5jVi83itkvi5Brda4PVxZp8"
+DOCUMENT_ID = os.getenv("DOCUMENT_ID")
 KEY = "keys/key.json"
 
 creds = service_account.Credentials.from_service_account_file(KEY, scopes=SCOPE)
@@ -115,3 +117,5 @@ body_new = {"values": [["Nuevo"]]}
 # print(result)
 
 # ---------
+# pro = probando.buscarCelda(sheets,"2178740786")
+# pro = probando.obtenerCelda(sheets, "nombre")

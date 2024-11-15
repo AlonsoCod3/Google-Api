@@ -1,10 +1,11 @@
+import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from parent_config import DRIVE_SCOPE as SCOPE
 
-DRIVE_SCOPE = ['https://www.googleapis.com/auth/drive']
 KEY = 'keys/key.json'
 
-drive_creds = service_account.Credentials.from_service_account_file(KEY, scopes=DRIVE_SCOPE)
+drive_creds = service_account.Credentials.from_service_account_file(KEY, scopes=SCOPE)
 drive_service2 = build("drive", "v2", credentials=drive_creds)
 drive_service = build("drive", "v3", credentials=drive_creds)
 
