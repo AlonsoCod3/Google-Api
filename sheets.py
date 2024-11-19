@@ -11,6 +11,22 @@ creds = service_account.Credentials.from_service_account_file(KEY, scopes=SCOPE)
 service = build("sheets", "v4", credentials=creds)
 sheets = service.spreadsheets()
 
+# Referencias de columnas
+columnas_busqueda = {
+    "nombre":"C",
+    "hashtag":"D",
+    "topic":"E",
+    "type":"F",
+}
+
+columnas_data = {
+    "id":"A",
+    "nombre":"B",
+    "hashtag":"C",
+    "topic":"D",
+    "type":"E",
+}
+
 # AÑADE UNA NUEVA HOJA EN UN DOCUMENTO YA CREADO
 # body = {
 #     "requests":{
@@ -117,5 +133,22 @@ body_new = {"values": [["Nuevo"]]}
 # print(result)
 
 # ---------
-# pro = probando.buscarCelda(sheets,"2178740786")
-# pro = probando.obtenerCelda(sheets, "nombre")
+probando.define_sheet(sheets)
+pro = probando.buscarCelda("2178740786")
+
+#convert list of lists to dict
+convert_to_dict  = {key.lower().replace(" ","_"): value for key, value in zip(pro[0], pro[1])}
+print(convert_to_dict)
+
+# value_compare debe estar dentro de los valores de column_data
+value_compare = "nombre"
+# valor que se compara con base de datos
+compare = "#sandra"
+# comparacion de valores
+if convert_to_dict[value_compare] != compare:
+    # actualizacion de valor
+    reference_cell = probando.obtenerReferencia()
+    probando.actualizarCelda(compare, columnas_data[value_compare]+reference_cell)
+else:
+    # no se realiza ninguna accion
+    print("No hay cambios")

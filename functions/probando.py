@@ -1,23 +1,32 @@
 import os
-columnas = {
-    "nombre":"C:C",
-    "hastags":"D:D",
-    "topic":"E:E",
-    "type":"F:F",
-}
 DOCUMENT_ID = os.getenv("DOCUMENT_ID")
-def buscarCelda(sheet,telegram_id_group ):
+# DOCUMENT_ID = "10-XhAKVGEbLTzjN-KDNc5jVi83itkvi5Brda4PVxZp8"
+
+sheet= None
+sheet_data = "Sheet1!"
+sheet_search = "LOOKUP_SHEET!"
+
+# Inicializamos el servicio sheet para utilizar en nuestras funciones
+def define_sheet(value):
+    global sheet
+    sheet = value
+
+#formulas para busqueda de datos
+# busca el primer valor especifico dentro de una columna
+# [['=MATCH("sandro", Sheet1!A:A,0)']]
+# [['=ROW(INDIRECT(ADDRESS(MATCH("sandro",Sheet1!A:A,0),1)))']]
+
+
+# Busca un id en la hoja de datos
+def buscarCelda(telegram_id_group):
     valo = {
-    # busca el primer valor especifico dentro de una columna
-    # "values": [['=MATCH("sandro", Sheet1!A:A,0)']]
-    # [['=ROW(INDIRECT(ADDRESS(MATCH("sandro",Sheet1!A:A,0),1)))']]
     "values": [[telegram_id_group]]
     }
     result = (
         sheet.values()
         .update(
             spreadsheetId=DOCUMENT_ID,
-            range="LOOKUP_SHEET!A2",
+            range= sheet_search+"A2",
             body=valo,
             valueInputOption="USER_ENTERED",
             includeValuesInResponse=True,
@@ -26,36 +35,37 @@ def buscarCelda(sheet,telegram_id_group ):
     )
     values = result.get("updatedData").get("values")[0][0]  # valor dentro de la matriz
     print("Valor buscado", values)  # valor dentro de la matriz}
-    result = obtenerResultado(sheet)
+    result = obtenerResultado()
     if result:
-        return obtenerCelda(sheet)
+        return obtenerDataResult()
     else:
         print("no hubo coincidencias")
         return False
 
-def obtenerCelda(sheet, rango="C:F"):
-    if rango != "C:F":
-        rango = columnas[rango]
-    values = "LOOKUP_SHEET!" + rango
+
+def obtenerDataResult(rango="C1:G2"):
+    values = sheet_search + rango
     result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     values = result.get('values')
     print("Valores obtenidos: ", values)
-    return values[1:]
+    return values
 
-def obtenerReferencia(sheet, rango="C:F"):
-    if rango != "C:F":
-        rango = columnas[rango]
-    values = "LOOKUP_SHEET!C2"
-    result = sheet.get(spreadsheetId=DOCUMENT_ID, ranges=values, fields="sheets").execute()
+def obtenerReferencia(rango="A5"):
+    values = sheet_search + rango
+    result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     print(result)
+    return result.get('values')[0][0]
 
-def obtenerResultado(sheet):
-    values = "LOOKUP_SHEET!B2"
+def obtenerResultado():
+    values = sheet_search + "B2"
     result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     values = result.get('values')
     print("Resultado Obtenido: ", values)
     return int(values[0][0])
 
-def actualizarCelda(sheet, valor):
-    #proximo
+def actualizarCelda(valor, rango):
+    body = {"values": [[valor]]}
+    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=rango, body= body, valueInputOption="USER_ENTERED").execute()
+    values = result
+    print(values)
     return True
