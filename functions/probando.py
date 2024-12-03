@@ -16,6 +16,24 @@ def define_sheet(value):
 # [['=MATCH("sandro", Sheet1!A:A,0)']]
 # [['=ROW(INDIRECT(ADDRESS(MATCH("sandro",Sheet1!A:A,0),1)))']]
 
+# Busca un valor en una columna determinada
+def buscarDato(value, column_range):
+    valo = [
+        { "range": sheet_search+"A12","values": [[value]] },
+        { "range": sheet_search+"B12","values": [[column_range]] },
+    ]
+    result = (
+        sheet.values()
+        .batchUpdate(
+            spreadsheetId=DOCUMENT_ID,
+            body={"valueInputOption":"USER_ENTERED", "data": valo, "includeValuesInResponse":True},
+        )
+        .execute()
+    )
+    values = result
+    # values = result.get("updatedData").get("values")[0][0]  # valor dentro de la matriz
+    print("Valor buscado", values)  # valor dentro de la matriz}
+
 
 # Busca un id en la hoja de datos
 def buscarCelda(telegram_id_group):
