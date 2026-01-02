@@ -2,7 +2,7 @@ import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from parent_config import SHEET_SCOPE as SCOPE
-from functions import probando
+from functions import probando,productos
 
 DOCUMENT_ID = os.getenv("DOCUMENT_ID")
 KEY = "keys/key.json"
@@ -134,7 +134,7 @@ body_new = {"values": [["Nuevo"]]}
 
 # ---------
 def initcializacion():
-    probando.define_sheet(sheets)
+    productos.define_sheet(sheets)
     print("termine")
 # pro = probando.buscarCelda("2178740786")
 

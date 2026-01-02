@@ -2,7 +2,7 @@ import os
 import sheets
 from sheets import columnas_busqueda, columnas_data
 
-from functions import probando
+from functions import probando, productos
 # function list [
 #   buscarDato(value, columm_range)
 #   buscarCelda(telegram_id)
@@ -13,4 +13,5 @@ from functions import probando
 # ]
 sheets.initcializacion()
 
-pro = probando.buscarDato("Pepe", columnas_data["nombre"])
+# pro = probando.buscarDato("Pepe", columnas_data["nombre"])
+pro = productos.obtenerDataResult()

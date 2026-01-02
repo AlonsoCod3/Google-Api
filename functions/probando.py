@@ -30,9 +30,12 @@ def buscarDato(value, column_range):
         )
         .execute()
     )
-    values = result
-    # values = result.get("updatedData").get("values")[0][0]  # valor dentro de la matriz
-    print("Valor buscado", values)  # valor dentro de la matriz}
+    # values = result
+    # values = result.get("updatedData").get("values")[0][0]  # valor dentro de la matriz #revisar xq no funciona
+    print("Valor buscado: ", value)  # valor dentro de la matriz}
+    result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search+"D12").execute()
+    values = result.get('values', [])
+    print("Se encontro en la celda: ", values[0][0])
 
 
 # Busca un id en la hoja de datos
