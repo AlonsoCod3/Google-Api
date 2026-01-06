@@ -1,6 +1,5 @@
 import os
 # DOCUMENT_ID = os.getenv("DOCUMENT_ID")
-DOCUMENT_ID = "10-XhAKVGEbLTzjN-KDNc5jVi83itkvi5Brda4PVxZp8"
 
 sheet= None
 sheet_data = "Sheet1!"
@@ -17,6 +16,12 @@ def obtenerDataResult(rango="A2:A"):
     data_res = []
     for product in result.get('values'):
         data_res.append(product[0])
+    # print("Valores obtenidos: ", data_res)
+    return data_res
 
-    print("Valores obtenidos: ", data_res)
-    return values
+def agregarCelda(valor, rango):
+    body = {"values": [[valor]]}
+    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=rango, body= body, valueInputOption="USER_ENTERED").execute()
+    values = result
+    print(values)
+    return True
