@@ -5,7 +5,7 @@ from parent_config import SHEET_SCOPE as SCOPE
 from functions import probando,productos
 
 DOCUMENT_ID = os.getenv("DOCUMENT_ID")
-KEY = "keys/key.json"
+KEY = "/etc/secrets/key.json"
 
 creds = service_account.Credentials.from_service_account_file(KEY, scopes=SCOPE)
 service = build("sheets", "v4", credentials=creds)
