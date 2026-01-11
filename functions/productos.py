@@ -1,5 +1,5 @@
 import os
-# DOCUMENT_ID = os.getenv("DOCUMENT_ID")
+DOCUMENT_ID = os.getenv("DOCUMENT_ID")
 
 sheet= None
 sheet_data = "Sheet1!"
