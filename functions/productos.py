@@ -26,7 +26,7 @@ def obtenerDataResult(rango="B2:B"):
 
 def agregarCelda(valor, rango):
     body = {"values": [[valor]]}
-    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=rango, body= body, valueInputOption="USER_ENTERED").execute()
+    result = sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rango, body= body, valueInputOption="USER_ENTERED").execute()
     values = result
     print(values)
     return True
