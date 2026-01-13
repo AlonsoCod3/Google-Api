@@ -54,7 +54,7 @@ def newe():
         print("Esta es la información que enviaste:", data)
         if not data:
             return jsonify({"Error": "JSON inválido o ausente"}), 400
-        if not isinstance(item.get("name"), str):
+        if not isinstance(data.get("name"), str):
             return ("El 'name' debe ser una cadena")
 
         result = productos.agregarCelda(data["name"], columnas_data["nombre"])
