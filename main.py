@@ -48,9 +48,10 @@ def get_item(id):
         return jsonify({'error': str(e)}), 500
 
 @app.route('/product/', methods=['POST']) #NEW
-def newe(id):
+def newe():
     try:
         data = request.get_json()
+        print("Esta es la información que enviaste:", data)
         if not data:
             return jsonify({"Error": "JSON inválido o ausente"}), 400
         if not isinstance(item.get("name"), str):
