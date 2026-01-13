@@ -6,7 +6,7 @@ from functions import probando, productos
 
 # API
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import requests
 
@@ -50,7 +50,7 @@ def get_item(id):
 @app.route('/product/', methods=['POST']) #NEW
 def newe():
     try:
-        data = requests.get_json()
+        data = request.get_json()
         print("Esta es la información que enviaste:", data)
         if not data:
             return jsonify({"Error": "JSON inválido o ausente"}), 400
