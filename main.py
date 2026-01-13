@@ -35,7 +35,6 @@ def index():
 def get_all():
     try:
         pro = productos.obtenerDataResult()
-        print(pro)
         return jsonify(pro)
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
@@ -43,8 +42,7 @@ def get_all():
 @app.route('/product/<id>', methods=['GET']) #GET_BY_ID
 def get_item(id):
     try:
-        pro = productos.obtenerDataResult()
-        print(pro)
+        pro = productos.buscarDato(id, columnas_data["nombre"])
         return jsonify(pro)
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
@@ -57,6 +55,9 @@ def newe(id):
             return jsonify({"Error": "JSON inválido o ausente"}), 400
         if not isinstance(item.get("name"), str):
             return ("El 'name' debe ser una cadena")
+
+        result = productos.agregarCelda(data["name"], columnas_data["nombre"])
+        print(result)
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500

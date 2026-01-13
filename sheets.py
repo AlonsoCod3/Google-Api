@@ -13,18 +13,16 @@ sheets = service.spreadsheets()
 
 # Referencias de columnas
 columnas_busqueda = {
-    "nombre":"C",
-    "hashtag":"D",
-    "topic":"E",
-    "type":"F",
+    "nombre":"B",
+    "type":"C",
+    "amount":"D",
 }
 
 columnas_data = {
     "id":"A",
     "nombre":"B",
-    "hashtag":"C",
-    "topic":"D",
-    "type":"E",
+    "type":"C",
+    "amount":"D"
 }
 
 # AÑADE UNA NUEVA HOJA EN UN DOCUMENTO YA CREADO
