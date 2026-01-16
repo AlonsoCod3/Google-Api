@@ -58,7 +58,7 @@ def newe():
             return ("El 'name' debe ser una cadena")
 
         pro = productos.agregarCelda(data, columnas_data["nombre"])
-        return jsonify(pro)
+        return pro
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
