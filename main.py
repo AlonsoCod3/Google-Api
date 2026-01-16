@@ -58,7 +58,7 @@ def newe():
         if not isinstance(data.get("name"), str):
             return ("El 'name' debe ser una cadena")
 
-        pro = productos.agregarCelda(data, columnas_data["nombre"])
+        pro = productos.agregarCelda(data)
         return pro
         
     except requests.exceptions.RequestException as e:

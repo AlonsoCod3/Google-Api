@@ -25,7 +25,7 @@ def obtenerDataResult(rango="B2:B"):
         data_res.append(product[0])
     return data_res
 
-def agregarCelda(valor, rango):
+def agregarCelda(valor, rango="A"):
     # body = {"values": [[valor]]}
     body = {"values": [[
         str(uuid.uuid4()),
