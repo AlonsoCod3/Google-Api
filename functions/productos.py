@@ -33,11 +33,17 @@ def agregarCelda(valor, rango):
         valor.get("type") if valor.get("type") else None,
         valor.get("amount") if valor.get("amount") else None
         ]]}
+
     print(sheet_search,flush=True)
-    result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_search}{rango}:{rango}").execute()
+    
+    rang_cell = f"{sheet_search}{rango}:{rango}"
+    result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=range).execute()
     
     last_row = len(result_rows.get("values",[])) + 1
-    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=f"Productos!{rango}{last_row}", body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
+    print(last_row, flush=True)
+
+    rang_last = f"Productos!{rango}{last_row}"
+    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
     values = result
     print(values.get("updatedData"))
     return values
