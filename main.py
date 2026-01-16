@@ -51,14 +51,17 @@ def get_item(id):
 def newe():
     try:
         data = request.get_json()
-        print("Esta es la información que enviaste:", data)
-        if not data:
-            return jsonify({"Error": "JSON inválido o ausente"}), 400
-        if not isinstance(data.get("name"), str):
-            return ("El 'name' debe ser una cadena")
+        # print("Esta es la información que enviaste:", data)
+        # if not data:
+        #     return jsonify({"Error": "JSON inválido o ausente"}), 400
+        # if not isinstance(data.get("name"), str):
+        #     return ("El 'name' debe ser una cadena")
 
-        pro = productos.agregarCelda(data, columnas_data["nombre"])
-        return jsonify(pro)
+        # pro = productos.agregarCelda(data, columnas_data["nombre"])
+        # return jsonify(pro)
+        print(data)
+        print(type(data))
+        return data
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
