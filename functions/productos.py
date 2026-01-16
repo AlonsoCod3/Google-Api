@@ -35,9 +35,9 @@ def agregarCelda(valor, rango):
         ]]}
 
     print(sheet_search,flush=True)
-    
+
     rang_cell = f"{sheet_search}{rango}:{rango}"
-    result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=range).execute()
+    result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=rang_cell).execute()
     
     last_row = len(result_rows.get("values",[])) + 1
     print(last_row, flush=True)
