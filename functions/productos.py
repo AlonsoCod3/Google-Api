@@ -28,22 +28,21 @@ def obtenerDataResult(rango="B2:B"):
 def agregarCelda(valor, rango):
     # body = {"values": [[valor]]}
     body = {"values": [[
-        uuid.uuid4,
+        str(uuid.uuid4()),
         valor.get("name") if valor.get("name") else None,
         valor.get("type") if valor.get("type") else None,
         valor.get("amount") if valor.get("amount") else None
         ]]}
-
     print(sheet_search,flush=True)
 
     rang_cell = f"{sheet_search}{rango}:{rango}"
     result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=rang_cell).execute()
     
     last_row = len(result_rows.get("values",[])) + 1
-    print(last_row, flush=True)
 
     rang_last = f"Productos!{rango}{last_row}"
-    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
+    result = sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
+
     values = result
     print(values.get("updatedData"))
     return values
