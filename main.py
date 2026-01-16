@@ -51,7 +51,7 @@ def get_item(id):
 def newe():
     try:
         data = request.get_json()
-        print("Esta es la información que enviaste:", data)
+        print("Esta es la información que enviaste:", data,flush=True)
         if not data:
             return jsonify({"Error": "JSON inválido o ausente"}), 400
         if not isinstance(data.get("name"), str):
