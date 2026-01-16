@@ -29,9 +29,9 @@ def agregarCelda(valor, rango):
     # body = {"values": [[valor]]}
     body = {"values": [[
         uuid.uuid4,
-        valor.name if valor.name else None,
-        valor.type if valor.type else None,
-        valor.amount if valor.amount else None
+        valor.get("name") if valor["name"] else None,
+        valor.get("type") if valor["type"] else None,
+        valor.get("amount") if valor["amount"] else None
         ]]}
     result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_search}{rango}:{rango}").execute()
     last_row = len(result_rows.get("values",[])) + 1
