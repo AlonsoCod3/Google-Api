@@ -8,7 +8,6 @@ from functions import probando, productos
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import requests
 
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
@@ -57,8 +56,8 @@ def newe():
         if not isinstance(data.get("name"), str):
             return ("El 'name' debe ser una cadena")
 
-        result = productos.agregarCelda(data["name"], columnas_data["nombre"])
-        print(result)
+        pro = productos.agregarCelda(data, columnas_data["nombre"])
+        return jsonify(pro)
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500

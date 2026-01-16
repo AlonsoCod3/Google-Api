@@ -1,4 +1,5 @@
 import os
+import uuid
 DOCUMENT_ID = os.getenv("DOCUMENT_ID")
 
 sheet= None
@@ -25,11 +26,19 @@ def obtenerDataResult(rango="B2:B"):
     return data_res
 
 def agregarCelda(valor, rango):
-    body = {"values": [[valor]]}
-    result = sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rango, body= body, valueInputOption="USER_ENTERED").execute()
+    # body = {"values": [[valor]]}
+    body = {"values": [[
+        uuid.uuid4,
+        valor.name if valor.bame else None,
+        valor.type if valor.type else None,
+        valor.amount if valor.amount else None
+        ]]}
+    result_rows = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_search}{rango}:{rango}").execute()
+    last_row = len(result_rows.get("values",[])) + 1
+    result = sheet.values().update(spreadsheetId=DOCUMENT_ID, range=f'Productos!{rango}{last_row}', body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
     values = result
-    print(values)
-    return True
+    print(values.get("updatedData"))
+    return values
 
 valor = sheet_valor["fila"]
 def buscarDato(value, column_range):
