@@ -1,0 +1,97 @@
+from functions import productos
+from functions.productos import (DOCUMENT_ID, sheet_valor)
+from flask import jsonify, request
+from crud.get.by_id import encontrarCelda
+from crud.get.by_id import buscarCelda
+import requests
+from datetime import datetime
+from sheets import columnas_data
+
+sheet_delete = "ELIMINADOS"
+
+def delet(id):
+    try:
+        buscarCelda(id, "A")
+        fila = encontrarCelda(sheet_valor["fila"])
+        if fila == "#N/A":
+            return jsonify({'Error': "Id de productos no encontrado"}), 500
+        
+        # pro = eliminarDato(fila)
+        result_rows = productos.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_delete}!A:A").execute()
+        last_row = len(result_rows.get("values",[]))
+
+        delete_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Se añade primero el timestamp para que no tome una fila vacia.
+        addTimeDelete(delete_date, last_row)
+        pro = cortarDato(fila, last_row)
+        
+        return jsonify(pro)
+        
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+def eliminarDato(fila_eliminar:int):
+    productos_id = productos.geto("Productos")
+    ner = {
+        "requests": [
+            {
+                "deleteDimension": {
+                    "range": {
+                    "sheetId": productos_id,
+                    "dimension": "ROWS",
+                    "startIndex": int(fila_eliminar) - 1,
+                    "endIndex": int(fila_eliminar)
+                    }
+                }
+            }
+        ]
+    }
+    result = productos.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
+    print("RESULATADO : ",result)
+    return result
+
+def cortarDato(fila_corte:int, last):
+    productos_id = productos.geto("Productos")
+    delete_id = productos.geto(sheet_delete)
+    print("eliminados ID", delete_id)
+
+    ner = {
+        "requests": [
+            {
+                "cutPaste": {
+                    "source": {
+                        "sheetId": productos_id,
+                        "startRowIndex": int(fila_corte) - 1,
+                        "endRowIndex": int(fila_corte),
+                        "startColumnIndex": 0,
+                        "endColumnIndex": 4
+                    },
+                    "destination":{
+                        "sheetId": delete_id,
+                        "rowIndex": last,
+                        "columnIndex": 1
+                    },
+                    "pasteType": "PASTE_NORMAL"
+                }
+
+            }
+        ]
+    }
+    result = productos.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
+    print("RESULATADO : ",result)
+    return result
+
+def addTimeDelete(time, row):
+    body = {"values": [[time]]}
+    
+    productos.sheet.values().append(
+        spreadsheetId=DOCUMENT_ID,
+        range=f"{sheet_delete}!A{row}",
+        body= body,
+        includeValuesInResponse=True,
+        valueInputOption="USER_ENTERED"
+    ).execute()
+
+    print("Se agrego timeStamp")
