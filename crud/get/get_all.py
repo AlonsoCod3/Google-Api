@@ -8,7 +8,7 @@ import requests
 def get_all():
     try:
         pro = obtenerDataResult()
-        return jsonify(pro)
+        return pro
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
 
@@ -17,7 +17,10 @@ def get_all():
 def obtenerDataResult(rango="B2:B"):
     values = sheet_search + rango
     result = productos.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
+    if not result.get('values'):
+        return jsonify({'error': "No products found"}), 400
+    print("RESPUESTA: ",result)
     data_res = []
     for product in result.get('values'):
         data_res.append(product[0])
-    return data_res
+    return jsonify(data_res)
