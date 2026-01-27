@@ -29,10 +29,17 @@ def edit_user(data_values, fila):
     
     valo = []
     if "name" in data_values:
+        data_values["name"] = data_values.get("name").lower()
+        buscarCelda(data_values["name"], "B")
+        validateProduct = encontrarCelda(sheet_valor["fila"])
+
+        if validateProduct != "#N/A":
+            return jsonify({'Error': "No se puede actulizar, nombre ya registrado"}), 500
         valo.append({ "range": f'{sheet_search}{columnas_data["nombre"]}{fila}',"values": [[data_values["name"]]] })
     if "amount" in data_values:
         valo.append({ "range": f'{sheet_search}{columnas_data["amount"]}{fila}',"values": [[data_values["amount"]]] })
     if "type" in data_values:
+        data_values["type"] = data_values.get("type").lower()
         valo.append({ "range": f'{sheet_search}{columnas_data["type"]}{fila}',"values": [[data_values["type"]]] })
     
 
