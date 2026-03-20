@@ -1,5 +1,6 @@
 import os
 from crud.get.get_all import get_all
+from crud.get.get_names import get_all_names
 from crud.get.by_id import get_item
 from crud.new.new import newe
 from crud.delete.eliminate import delet
@@ -34,6 +35,10 @@ def geto():
 @routing.route("/") #GET
 def get():
     return get_all()
+
+@routing.route("/names") #GET_NAMES
+def getName():
+    return get_all_names()
 
 @routing.route("/<id>") #GET_ID
 def by_id(id):
