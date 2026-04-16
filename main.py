@@ -1,5 +1,6 @@
 import os
 import sheets
+from flask import jsonify
 from router.products.products_hook import routing
 
 # API
@@ -14,6 +15,10 @@ sheets.initcializacion()
 @app.route('/', methods=['GET'])
 def index():
   return "HOLA"
+
+@app.route('/verify', methods=['GET'])
+def veri():
+  return jsonify(True)
 
 app.register_blueprint(routing, url_prefix="/products")
 
