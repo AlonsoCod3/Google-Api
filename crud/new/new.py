@@ -1,11 +1,12 @@
-from functions import productos
+from functions import customer
 from flask import jsonify, request
 from crud.get.by_id import encontrarCelda
 from crud.get.by_id import buscarCelda
 import requests
 import uuid
+from datetime import datetime
 
-from functions.productos import (DOCUMENT_ID, sheet_search, sheet_valor)
+from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
 
 def newe():
     try:
@@ -24,12 +25,12 @@ def newe():
         if errores:
             return jsonify({"Error": errores}), 400
 
-        data["name"] = data.get("name").lower()
-        buscarCelda(data.get("name"), "B")
+        data["docNumber"] = data.get("docNumber").lower()
+        buscarCelda(data.get("docNumber"), "D")
         validateProduct = encontrarCelda(sheet_valor["fila"])
 
         if validateProduct != "#N/A":
-            return jsonify({'Error': "Producto ya creado"}), 500
+            return jsonify({'Error': "Usuario ya registrado con el mismo DOC"}), 500
 
         pro = agregarCelda(data)
         return pro
@@ -40,21 +41,21 @@ def newe():
 # Crea un nuevo producto en la hoja de calculo
 def agregarCelda(valor, rango="A"):
     rang_cell = f"{sheet_search}{rango}:{rango}"
-    result_rows = productos.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=rang_cell).execute()
+    result_rows = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=rang_cell).execute()
     
     last_row = len(result_rows.get("values",[])) + 1
 
     body = {"values": [[
         str(uuid.uuid4()),
-        str(len(result_rows.get("values",[])) - 1).zfill(3),
+        valor["typeDoc"].lower(),
         valor["name"].lower(),
-        valor["description"].lower(),
-        valor["price"],
-        len(valor["variants"]) if valor.get("variants") else 0
+        valor["docNumber"].lower(),
+        valor["number"] if valor.get("number") else "",
+        datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ]]}
 
-    rang_last = f"Productos!{rango}{last_row}"
-    result = productos.sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
+    rang_last = f"Clientes!{rango}{last_row}"
+    result = customer.sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
 
     values = result
     print(values.get("updates").get("updatedData"))
@@ -62,29 +63,21 @@ def agregarCelda(valor, rango="A"):
 
 def validar_producto(item):
     errores = []
+    required = ["typeDoc, name, docNumber"]
+
+     # Campos requeridos y no vacíos
+    for field in required:
+        if field not in item or not str(item.get(field, "")).strip():
+            errores.append(f"El campo '{field}' es requerido y no puede estar vacío")
+
+    if not isinstance(item.get("typeDoc"), str):
+        errores.append("El 'typeDoc' debe ser una cadena")
 
     if not isinstance(item.get("name"), str):
-        return ("El 'name' debe ser una cadena")
+        errores.append("El 'name' debe ser una cadena")
 
-    if not isinstance(item.get("description"), str):
-        return ("El 'description' debe ser una cadena")
+    if not isinstance(item.get("docNumber"), (int, float)):
+        errores.append("El 'docNumber' debe ser un número")
 
-    if not isinstance(item.get("price"), (int, float)):
-        return ("El 'price' debe ser un número")
-
-    # Validar variants
-    if item.get("variants"):
-        variants = item.get("variants")
-
-        if not isinstance(variants, list):
-            return ("El 'variants' debe ser una lista")
-        else:
-            for i, variant in enumerate(variants):
-                
-                if not isinstance(variant.get("name"), str):
-                    return (f"Variant[{i}]: 'nombre' debe ser una cadena")
-                if not isinstance(variant.get("price"), (int, float)):
-                    return (f"Variant[{i}]: 'precio' debe ser un número")
-    else:
-        print("not hay variantes")
+    
     return False

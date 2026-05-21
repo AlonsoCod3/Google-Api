@@ -1,10 +1,10 @@
 import os
 from flask import jsonify
-DOCUMENT_ID = os.getenv("DOCUMENT_ID")
+# DOCUMENT_ID = os.getenv("DOCUMENT_ID")
+DOCUMENT_ID = "10-XhAKVGEbLTzjN-KDNc5jVi83itkvi5Brda4PVxZp8"
 
 sheet= None
-sheet_data = "Sheet1!"
-sheet_search = "Productos!"
+sheet_search = "Clientes!"
 sheet_search_form = "LOOKUP_SHEET!"
 sheet_valor = {
     "columna":"B",
@@ -32,7 +32,7 @@ def geto(id):
 
 # fila = encontrarCelda(productos.sheet_valor["fila"])
 def getCell():
-    result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search_form+sheet_valor["fila"]+"12").execute()
+    result = sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search_form+sheet_valor["fila"]+"13").execute()
     values = result.get('values', [])
     print("Se encontro en la celda: ", values[0][0])
     return values[0][0]

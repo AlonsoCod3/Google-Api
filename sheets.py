@@ -2,7 +2,7 @@ import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from parent_config import SHEET_SCOPE as SCOPE
-from functions import probando,productos
+from functions import probando,customer
 
 DOCUMENT_ID = os.getenv("DOCUMENT_ID")
 KEY = "/etc/secrets/key.json"
@@ -13,28 +13,20 @@ sheets = service.spreadsheets()
 
 # Referencias de columnas
 columnas_busqueda = {
-    "nombre":"B",
-    "type":"C",
-    "amount":"D",
+    "type":"B",
+    "nombre":"C",
+    "doc":"D",
 }
 
 columnas_data = {
     "id":"A",
-    "nombre":"B",
-    "type":"C",
-    "amount":"D"
+    "type":"B",
+    "nombre":"C",
+    "doc":"D",
+    "number":"E"
 }
 
-# AÑADE UNA NUEVA HOJA EN UN DOCUMENTO YA CREADO
-# body = {
-#     "requests":{
-#         "addSheet":{
-#             "properties": {
-#                 "title": "nuevos"
-#             }
-#         }
-#     }
-# }
+
 # sheets = service.spreadsheets().batchUpdate(spreadsheetId = DOCUMENT_ID, body = body).execute()
 
 # --------------------------------
@@ -115,42 +107,9 @@ body_new = {"values": [["Nuevo"]]}
 # values = result.getUrl()
 # print(values)
 
-# SE CREA UN NUEVO DOCUMENTO QUE TIENE COMO PROPIETARIO EL BOT --------------------------------
-# spreadsheet = {"properties": {"title": "mySheets"}}
-# spreadsheet = (
-#     service.spreadsheets()
-#     .create(body=spreadsheet, fields="spreadsheetId")
-#     .execute()
-# )
-# print(f"Spreadsheet ID: {(spreadsheet.get('spreadsheetId'))}")
-# values = spreadsheet.get("spreadsheetId")
-# print(values)
-
-# LISTANDO INFORMACION RELACIONADA CON UNA HOJA DE CALCULO --------------------------------
-# result = sheets.get(spreadsheetId=ID_priv).execute()
-# print(result)
 
 # ---------
 def initcializacion():
-    productos.define_sheet(sheets)
+    customer.define_sheet(sheets)
     print("termine")
-# pro = probando.buscarCelda("2178740786")
 
-# #convert list of lists to dict
-# convert_to_dict  = {key.lower().replace(" ","_"): value for key, value in zip(pro[0], pro[1])}
-# print(convert_to_dict)
-
-# # value_compare debe estar dentro de los valores de column_data
-# value_compare = "nombre"
-# # valor que se compara con base de datos
-# compare = "#sandra"
-# # comparacion de valores
-# if convert_to_dict[value_compare] != compare:
-#     # actualizacion de valor
-#     reference_cell = probando.obtenerReferencia()
-#     probando.actualizarCelda(compare, columnas_data[value_compare]+reference_cell)
-# else:
-#     # no se realiza ninguna accion
-#     print("No hay cambios")
-
-# pro = probando.buscarDato("Pepe", columnas_data["nombre"])

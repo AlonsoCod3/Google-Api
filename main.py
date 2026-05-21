@@ -1,7 +1,7 @@
 import os
 import sheets
 from flask import jsonify
-from router.products.products_hook import routing
+from router.customer.customers_hook import routing
 
 # API
 from flask import Flask
@@ -20,7 +20,7 @@ def index():
 def veri():
   return jsonify(True)
 
-app.register_blueprint(routing, url_prefix="/products")
+app.register_blueprint(routing, url_prefix="/customers")
 
 if __name__ == '__main__':  
   app.run(host='0.0.0.0')

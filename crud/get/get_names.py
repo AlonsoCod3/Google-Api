@@ -1,6 +1,6 @@
 
-from functions import productos
-from functions.productos import (sheet_search, DOCUMENT_ID)
+from functions import customers
+from functions.customers import (sheet_search, DOCUMENT_ID)
 from flask import jsonify
 import requests
 
@@ -13,10 +13,10 @@ def get_all_names():
         return jsonify({'error': str(e)}), 500
 
 # FUNCIONALIDAD DEL SERVICIO
-# Consulta y devuelve todos los nombres de los productos
+# Consulta y devuelve todos los nombres de los clientes
 def obtenerDataResult(rango="C2:C"):
     values = sheet_search + rango
-    result = productos.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
+    result = customers.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     if not result.get('values'):
         return jsonify({'error': "No products found"}), 400
     print("RESPUESTA: ",result)

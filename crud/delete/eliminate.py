@@ -1,5 +1,5 @@
-from functions import productos
-from functions.productos import (DOCUMENT_ID, sheet_valor)
+from functions import customer
+from functions.customer import (DOCUMENT_ID, sheet_valor)
 from flask import jsonify, request
 from crud.get.by_id import encontrarCelda
 from crud.get.by_id import buscarCelda
@@ -7,17 +7,20 @@ import requests
 from datetime import datetime
 from sheets import columnas_data
 
-sheet_delete = "ELIMINADOS"
+sheet_delete = "Clientes_Del"
+clientes_id = ""
 
 def delet(id):
     try:
         buscarCelda(id, "A")
         fila = encontrarCelda(sheet_valor["fila"])
         if fila == "#N/A":
-            return jsonify({'Error': "Id de productos no encontrado"}), 500
+            return jsonify({'Error': "Id de Cliente no encontrado"}), 500
         
         # pro = eliminarDato(fila)
-        result_rows = productos.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_delete}!A:A").execute()
+        global clientes_id
+        clientes_id = customer.geto("Clientes")
+        result_rows = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=f"{sheet_delete}!A:A").execute()
         last_row = len(result_rows.get("values",[]))
 
         delete_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -33,13 +36,13 @@ def delet(id):
     
 
 def eliminarDato(fila_eliminar:int):
-    productos_id = productos.geto("Productos")
+    
     ner = {
         "requests": [
             {
                 "deleteDimension": {
                     "range": {
-                    "sheetId": productos_id,
+                    "sheetId": clientes_id,
                     "dimension": "ROWS",
                     "startIndex": int(fila_eliminar) - 1,
                     "endIndex": int(fila_eliminar)
@@ -48,13 +51,12 @@ def eliminarDato(fila_eliminar:int):
             }
         ]
     }
-    result = productos.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
+    result = customer.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
     print("RESULATADO : ",result)
     return result
 
 def cortarDato(fila_corte:int, last):
-    productos_id = productos.geto("Productos")
-    delete_id = productos.geto(sheet_delete)
+    delete_id = customer.geto(sheet_delete)
     print("eliminados ID", delete_id)
 
     ner = {
@@ -62,11 +64,11 @@ def cortarDato(fila_corte:int, last):
             {
                 "cutPaste": {
                     "source": {
-                        "sheetId": productos_id,
+                        "sheetId": clientes_id,
                         "startRowIndex": int(fila_corte) - 1,
                         "endRowIndex": int(fila_corte),
                         "startColumnIndex": 0,
-                        "endColumnIndex": 4
+                        "endColumnIndex": 6
                     },
                     "destination":{
                         "sheetId": delete_id,
@@ -79,14 +81,14 @@ def cortarDato(fila_corte:int, last):
             }
         ]
     }
-    result = productos.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
+    result = customer.sheet.batchUpdate(spreadsheetId=DOCUMENT_ID, body= ner).execute()
     print("RESULATADO : ",result)
     return result
 
 def addTimeDelete(time, row):
     body = {"values": [[time]]}
     
-    productos.sheet.values().append(
+    customer.sheet.values().append(
         spreadsheetId=DOCUMENT_ID,
         range=f"{sheet_delete}!A{row}",
         body= body,
