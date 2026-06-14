@@ -1,6 +1,7 @@
 import os
 from crud.get.get_all import get_all
 from crud.get.by_id import get_item
+from crud.get.get_names import get_all_names
 from crud.new.new import newe
 from crud.delete.eliminate import delet
 # from crud.edit.pathc_user import edito
@@ -35,6 +36,10 @@ def get():
 @routing.route("/<id>") #GET_ID
 def by_id(id):
     return get_item(id)
+
+@routing.route("/name/<name>") #GET_NAMES
+def get_names(name):
+    return get_all_names(name)
 
 @routing.route("/", methods=["POST"]) #NEW
 def new():
