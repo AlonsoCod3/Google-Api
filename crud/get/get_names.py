@@ -13,21 +13,14 @@ def get_all_names(name):
         return jsonify({'error': str(e)}), 500
 
 # FUNCIONALIDAD DEL SERVICIO
-# Consulta y devuelve todos los nombres de los clientes
+# Consulta y grupos de dni o ruc
+type = {
+"dni":"H:M",
+"ruc":"A:F"
+}
+
 def obtenerDataResult(name):
-    valo = {
-    "values": [[f'=FILTER(Clientes!A:F, Clientes!B:B = "{name}")']]
-    }
-
-    result = customer.sheet.values().update(
-            spreadsheetId=DOCUMENT_ID,
-            range="Clientes_Search!A1",
-            body=valo,
-            valueInputOption="USER_ENTERED",
-            includeValuesInResponse=True,
-        ).execute()
-
-    values = "Clientes_Search!A:F"
+    values = "Clientes_Search!" + type[name]
     result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     if not result.get('values'):
         return jsonify({'error': "No customer found"}), 400
