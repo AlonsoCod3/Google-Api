@@ -49,7 +49,7 @@ def agregarCelda(valor, rango="A"):
         str(uuid.uuid4()),
         valor["typeDoc"].lower(),
         valor["name"].lower(),
-        valor["docNumber"].lower(),
+        valor["docNumber"],
         valor["number"] if valor.get("number") else "",
         datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ]]}
@@ -80,4 +80,4 @@ def validar_producto(item):
         errores.append("El 'docNumber' debe ser un número")
 
     
-    return False
+    return errores
