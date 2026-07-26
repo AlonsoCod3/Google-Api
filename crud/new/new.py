@@ -25,7 +25,7 @@ def newe():
         if errores:
             return jsonify({"Error": errores}), 400
 
-        data["docNumber"] = data.get("docNumber").lower()
+        data["docNumber"] = data.get("docNumber")
         buscarCelda(data.get("docNumber"), "D")
         validateProduct = encontrarCelda(sheet_valor["fila"])
 
