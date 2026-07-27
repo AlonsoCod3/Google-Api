@@ -32,7 +32,11 @@ def newe():
 
         print("pase los campos", flush=True)
 
-        errores = validar_producto(data)
+        errores = validar_requeridos(data)
+        if errores:
+            return {errores}, 400
+        
+        errores = validar_tipos(data)
         if errores:
             return {errores}, 400
 
@@ -71,14 +75,20 @@ def agregarCelda(valor, rango="A"):
     print(values.get("updates").get("updatedData"), flush=True)
     return f"Recurso creado con éxito, docNumber: {valor[verifiqued[2]]}"
 
-def validar_producto(item):
+def validar_requeridos(item):
     errores = []
 
-     # Campos requeridos y no vacíos
+    # Campos requeridos y no vacíos
     for field in required:
         if field not in item or not str(item.get(field, "")).strip():
             errores.append(f"El campo '{field}' es requerido y no puede estar vacío")
+    
+    return errores
 
+def validar_tipos(item):
+    errores = []
+
+    # Tipo de datos de cada campo
     if not isinstance(item.get(verifiqued[0]), str):
         errores.append(f"El {verifiqued[0]} debe ser una cadena")
 
@@ -92,5 +102,4 @@ def validar_producto(item):
         if not item.get(verifiqued[3]).isdigit():
             errores.append(f"El {verifiqued[3]} debe ser un número")
 
-    
     return errores
