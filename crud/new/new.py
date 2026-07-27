@@ -7,23 +7,34 @@ import uuid
 from datetime import datetime
 
 from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
+# FIELDS
+# id,
+# typeDoc,
+# name,
+# docNumber,
+# number,
+# timestamp
+
+required = ["type", "name", "numDoc"]
+verifiqued = ["type", "name", "numDoc", "phoneNumber"]
+
 
 def newe():
     try:
         data = request.get_json()
         print("Esta es la información que enviaste:", data,flush=True)
-        print("type of data: ", type(data))
+        print("type of data: ", type(data), flush=True)
         if not data:
             return jsonify({"Error": "JSON inválido o ausente"}), 400
 
         # if "name" not in data or "type" not in data or "amount" not in data:
         #     return jsonify({"Error": "Faltan campos requeridos: name or type or amount"}), 400
 
-        print("pase los 3 campos")
+        print("pase los campos", flush=True)
 
         errores = validar_producto(data)
         if errores:
-            return jsonify({"Error": errores}), 400
+            return jsonify({"error": errores}), 400
 
         data["docNumber"] = data.get("docNumber")
         buscarCelda(data.get("docNumber"), "D")
@@ -58,26 +69,29 @@ def agregarCelda(valor, rango="A"):
     result = customer.sheet.values().append(spreadsheetId=DOCUMENT_ID, range=rang_last, body= body, includeValuesInResponse=True, valueInputOption="USER_ENTERED").execute()
 
     values = result
-    print(values.get("updates").get("updatedData"))
+    print(values.get("updates").get("updatedData"), flush=True)
     return values
 
 def validar_producto(item):
     errores = []
-    required = ["typeDoc, name, docNumber"]
 
      # Campos requeridos y no vacíos
     for field in required:
         if field not in item or not str(item.get(field, "")).strip():
             errores.append(f"El campo '{field}' es requerido y no puede estar vacío")
 
-    if not isinstance(item.get("typeDoc"), str):
-        errores.append("El 'typeDoc' debe ser una cadena")
+    if not isinstance(item.get(verifiqued[0]), str):
+        errores.append(f"El {verifiqued[0]} debe ser una cadena")
 
-    if not isinstance(item.get("name"), str):
-        errores.append("El 'name' debe ser una cadena")
+    if not isinstance(item.get(verifiqued[1]), str):
+        errores.append(f"El {verifiqued[1]} debe ser una cadena")
 
-    if not isinstance(item.get("docNumber"), (int, float)):
-        errores.append("El 'docNumber' debe ser un número")
+    if not isinstance(item.get(verifiqued[2]), (int, float)) or int(item.get(verifiqued[2])):
+        errores.append(f"El {verifiqued[2]} debe ser un número")
+    
+    if verifiqued[3] in item:
+        if not isinstance(item.get(verifiqued[3]), int):
+            errores.append(f"El {verifiqued[3]} debe ser un número")
 
     
     return errores
