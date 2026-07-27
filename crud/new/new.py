@@ -36,12 +36,11 @@ def newe():
         if errores:
             return jsonify({"error": errores}), 400
 
-        data["docNumber"] = data.get("docNumber")
         buscarCelda(data.get("docNumber"), "D")
-        validateProduct = encontrarCelda(sheet_valor["fila"])
+        validateDoc = encontrarCelda(sheet_valor["fila"])
 
-        if validateProduct != "#N/A":
-            return jsonify({'Error': "Usuario ya registrado con el mismo DOC"}), 500
+        if validateDoc != "#N/A":
+            return jsonify({'Error': "Usuario ya registrado con el mismo docNumber"}), 500
 
         pro = agregarCelda(data)
         return pro
