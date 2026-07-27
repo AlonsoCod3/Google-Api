@@ -34,11 +34,11 @@ def newe():
 
         errores = validar_requeridos(data)
         if errores:
-            return set(errores), 400
+            return errores, 400
         
         errores = validar_tipos(data)
         if errores:
-            return set(errores), 400
+            return errores, 400
 
         buscarCelda(data.get(verifiqued[2]), "D")
         validateDoc = encontrarCelda(sheet_valor["fila"])
