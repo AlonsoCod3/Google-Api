@@ -34,19 +34,19 @@ def newe():
 
         errores = validar_producto(data)
         if errores:
-            return jsonify({"error": errores}), 400
+            return jsonify({errores}), 400
 
         buscarCelda(data.get(verifiqued[2]), "D")
         validateDoc = encontrarCelda(sheet_valor["fila"])
 
         if validateDoc != "#N/A":
-            return jsonify({'Error': f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 409
+            return jsonify({ f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 409
 
         pro = agregarCelda(data)
         return jsonify({'message': str(pro)}), 201
         
     except requests.exceptions.RequestException as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({str(e)}), 500
 
 # Crea un nuevo producto en la hoja de calculo
 def agregarCelda(valor, rango="A"):
@@ -69,7 +69,7 @@ def agregarCelda(valor, rango="A"):
 
     values = result
     print(values.get("updates").get("updatedData"), flush=True)
-    return { f"Recurso creado con éxito, docNumber: {valor[verifiqued[2]]}" }
+    return f"Recurso creado con éxito, docNumber: {valor[verifiqued[2]]}"
 
 def validar_producto(item):
     errores = []
