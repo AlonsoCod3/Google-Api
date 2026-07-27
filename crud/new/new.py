@@ -40,7 +40,7 @@ def newe():
         validateDoc = encontrarCelda(sheet_valor["fila"])
 
         if validateDoc != "#N/A":
-            return jsonify({'Error': f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 500
+            return jsonify({'Error': f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 409
 
         pro = agregarCelda(data)
         return jsonify({'message': str(pro)}), 201
@@ -69,7 +69,7 @@ def agregarCelda(valor, rango="A"):
 
     values = result
     print(values.get("updates").get("updatedData"), flush=True)
-    return { f"Recurso creado con éxito, docNumber: {verifiqued[2]}" }
+    return { f"Recurso creado con éxito, docNumber: {valor[verifiqued[2]]}" }
 
 def validar_producto(item):
     errores = []
