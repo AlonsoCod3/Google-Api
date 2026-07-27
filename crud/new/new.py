@@ -43,7 +43,7 @@ def newe():
             return jsonify({'Error': f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 500
 
         pro = agregarCelda(data)
-        return pro, 201
+        return jsonify({'message': str(pro)}), 201
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
