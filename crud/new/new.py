@@ -25,7 +25,7 @@ def newe():
         print("Esta es la información que enviaste:", data,flush=True)
         print("type of data: ", type(data), flush=True)
         if not data:
-            return jsonify({"Error": "JSON inválido o ausente"}), 400
+            return "JSON inválido o ausente", 400
 
         # if "name" not in data or "type" not in data or "amount" not in data:
         #     return jsonify({"Error": "Faltan campos requeridos: name or type or amount"}), 400
@@ -34,19 +34,19 @@ def newe():
 
         errores = validar_producto(data)
         if errores:
-            return jsonify({errores}), 400
+            return {errores}, 400
 
         buscarCelda(data.get(verifiqued[2]), "D")
         validateDoc = encontrarCelda(sheet_valor["fila"])
 
         if validateDoc != "#N/A":
-            return jsonify({ f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 409
+            return f"Usuario ya registrado con el mismo {verifiqued[2]}" , 409
 
         pro = agregarCelda(data)
         return jsonify({'message': str(pro)}), 201
         
     except requests.exceptions.RequestException as e:
-        return jsonify({str(e)}), 500
+        return {str(e)}, 500
 
 # Crea un nuevo producto en la hoja de calculo
 def agregarCelda(valor, rango="A"):
