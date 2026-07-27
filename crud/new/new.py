@@ -43,7 +43,7 @@ def newe():
             return jsonify({'Error': f"Usuario ya registrado con el mismo {verifiqued[2]}"}), 500
 
         pro = agregarCelda(data)
-        return pro
+        return pro, 201
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
@@ -69,7 +69,7 @@ def agregarCelda(valor, rango="A"):
 
     values = result
     print(values.get("updates").get("updatedData"), flush=True)
-    return values
+    return { f"Recurso creado con éxito, docNumber: {verifiqued[2]}" }
 
 def validar_producto(item):
     errores = []
