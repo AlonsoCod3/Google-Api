@@ -58,10 +58,10 @@ def agregarCelda(valor, rango="A"):
 
     body = {"values": [[
         str(uuid.uuid4()),
-        valor["typeDoc"].lower(),
-        valor["name"].lower(),
-        valor["docNumber"],
-        valor["number"] if valor.get("number") else "",
+        valor[verifiqued[0]].lower(),
+        valor[verifiqued[1]].lower(),
+        valor[verifiqued[2]],
+        valor[verifiqued[3]] if valor.get(verifiqued[3]) else "",
         datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ]]}
 
@@ -86,11 +86,11 @@ def validar_producto(item):
     if not isinstance(item.get(verifiqued[1]), str):
         errores.append(f"El {verifiqued[1]} debe ser una cadena")
 
-    if not isinstance(item.get(verifiqued[2]), (int, float)) or int(item.get(verifiqued[2])):
+    if not item.get(verifiqued[2]).isdigit():
         errores.append(f"El {verifiqued[2]} debe ser un número")
     
     if verifiqued[3] in item:
-        if not isinstance(item.get(verifiqued[3]), int):
+        if not item.get(verifiqued[3]).isdigit():
             errores.append(f"El {verifiqued[3]} debe ser un número")
 
     
