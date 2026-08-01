@@ -12,11 +12,12 @@ routing = Blueprint("customers", __name__)
 
 # producto = {
 #     id: number,
-#     typeDoc: string,
 #     name: string,
+#     docType: string,
 #     docNumber: number,
-#     number: number,
+#     phone: number,
 #     createdDate: string
+#     updatedAt: string
 # }
 
 # -------------------------------------------------

@@ -9,14 +9,14 @@ from datetime import datetime
 from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
 # FIELDS
 # id,
-# typeDoc,
 # name,
+# docType,
 # docNumber,
-# number,
+# phone,
 # timestamp
 
-required = ["type", "name", "numDoc"]
-verifiqued = ["type", "name", "numDoc", "phoneNumber"]
+required = ["docType", "name", "docNumber"]
+verifiqued = ["docType", "name", "docNumber", "phone"]
 
 
 def newe():

@@ -29,10 +29,10 @@ def obtenerDataResult(name):
     for client in result.get('values'):
         item = {}
         item["id"] = client[0]
-        item["typeDoc"] = client[1]
+        item["docType"] = client[1]
         item["name"] = client[2]
         item["docNumber"] = client[3]
-        item["number"] = client[4]
+        item["phone"] = client[4]
         item["createdDate"] = client[5]
         data_res.append(item)
 
