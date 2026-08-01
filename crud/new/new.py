@@ -99,7 +99,7 @@ def validar_tipos(item):
         errores.append(f"El {verifiqued[2]} debe ser un número")
     
     if verifiqued[3] in item:
-        if not item.get(verifiqued[3]).isdigit():
+        if item.get(verifiqued[3]) != '' and not item.get(verifiqued[3]).isdigit():
             errores.append(f"El {verifiqued[3]} debe ser un número")
 
     return errores
