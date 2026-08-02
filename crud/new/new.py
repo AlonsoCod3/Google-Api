@@ -8,12 +8,12 @@ from datetime import datetime
 
 from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
 # FIELDS
-# id,
-# name,
-# docType,
-# docNumber,
-# phone,
-# timestamp
+# id, A
+# docType, B
+# name, C
+# docNumber, D
+# phone, E
+# createdAt F
 
 required = ["docType", "name", "docNumber"]
 verifiqued = ["docType", "name", "docNumber", "phone"]
@@ -25,16 +25,14 @@ def newe():
         print("Esta es la información que enviaste:", data,flush=True)
         print("type of data: ", type(data), flush=True)
         if not data:
-            return "JSON inválido o ausente", 400
+            return jsonify({"error": "JSON inválido o ausente"}), 400
 
-        # if "name" not in data or "type" not in data or "amount" not in data:
-        #     return jsonify({"Error": "Faltan campos requeridos: name or type or amount"}), 400
-
-        print("pase los campos", flush=True)
+        print("Pase el campo Json", flush=True)
 
         errores = validar_requeridos(data)
         if errores:
             return errores, 400
+        print("Pase los campos requerdos", flush=True)
         
         errores = validar_tipos(data)
         if errores:
@@ -44,13 +42,13 @@ def newe():
         validateDoc = encontrarCelda(sheet_valor["fila"])
 
         if validateDoc != "#N/A":
-            return f"Usuario ya registrado con el mismo {verifiqued[2]}" , 409
+            return jsonify({"error","Usuario ya registrado con el mismo {verifiqued[2]}"}) , 409
 
         pro = agregarCelda(data)
         return jsonify({'message': str(pro)}), 201
         
     except requests.exceptions.RequestException as e:
-        return {str(e)}, 500
+        return jsonify({"error",str(e)}), 500
 
 # Crea un nuevo producto en la hoja de calculo
 def agregarCelda(valor, rango="A"):

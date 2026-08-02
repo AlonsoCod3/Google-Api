@@ -4,16 +4,16 @@ from crud.get.by_id import get_item
 from crud.get.get_names import get_all_names
 from crud.new.new import newe
 from crud.delete.eliminate import delet
-# from crud.edit.pathc_user import edito
+from crud.edit.pathc_user import edito
 from functions import customer
 
 from flask import Blueprint
 routing = Blueprint("customers", __name__)
 
-# producto = {
-#     id: number,
-#     name: string,
+# customer = {
+#     id: string,
 #     docType: string,
+#     name: string,
 #     docNumber: number,
 #     phone: number,
 #     createdDate: string
@@ -46,9 +46,9 @@ def get_names(name):
 def new():
     return newe()
 
-# @routing.route("/<id>", methods=["PATCH"]) #EDIT
-# def edit(id):
-#     return edito(id)
+@routing.route("/<id>", methods=["PATCH"]) #EDIT
+def edit(id):
+    return edito(id)
 
 # @routing.route("/<id>", methods=["PUT"]) #UPDATE
 # def update(id):
