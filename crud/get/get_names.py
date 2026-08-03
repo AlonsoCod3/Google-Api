@@ -4,6 +4,14 @@ from functions.customer import (DOCUMENT_ID)
 from flask import jsonify
 import requests
 
+# FIELDS
+# id, A
+# docType, B
+# name, C
+# docNumber, D
+# phone, E
+# createdAt F
+
 # EXPORT FUNC
 def get_all_names(name):
     try:
@@ -15,16 +23,18 @@ def get_all_names(name):
 # FUNCIONALIDAD DEL SERVICIO
 # Consulta y grupos de dni o ruc
 type = {
-"dni":"H:M",
-"ruc":"A:F"
+"dni":"H:N",
+"ruc":"A:G"
 }
 
 def obtenerDataResult(name):
     values = "Clientes_Search!" + type[name]
     result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=values).execute()
     if not result.get('values'):
-        return jsonify({'error': "No customer found"}), 400
-    print("RESPUESTA: ",result)
+        return jsonify({'error': "No customer found"}), 404
+    print("RESPUESTA: ",flush=True)
+    print(result, flush=True)
+
     data_res = []
     for client in result.get('values'):
         item = {}
@@ -34,6 +44,7 @@ def obtenerDataResult(name):
         item["docNumber"] = client[3]
         item["phone"] = client[4]
         item["createdDate"] = client[5]
+        item["updateDate"] = client[6] if len(client) > 6 else ""
         data_res.append(item)
 
-    return jsonify(data_res)
+    return jsonify(data_res), 200

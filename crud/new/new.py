@@ -6,7 +6,7 @@ import requests
 import uuid
 from datetime import datetime
 
-from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
+from functions.customer import (DOCUMENT_ID, sheet_data, sheet_valor)
 # FIELDS
 # id, A
 # docType, B
@@ -52,7 +52,7 @@ def newe():
 
 # Crea un nuevo producto en la hoja de calculo
 def agregarCelda(valor, rango="A"):
-    rang_cell = f"{sheet_search}{rango}:{rango}"
+    rang_cell = f"{sheet_data}{rango}:{rango}"
     result_rows = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=rang_cell).execute()
     
     last_row = len(result_rows.get("values",[])) + 1
@@ -63,6 +63,7 @@ def agregarCelda(valor, rango="A"):
         valor[verifiqued[1]].lower(),
         valor[verifiqued[2]],
         valor[verifiqued[3]] if valor.get(verifiqued[3]) else "",
+        datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ]]}
 

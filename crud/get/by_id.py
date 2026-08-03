@@ -1,16 +1,23 @@
 from functions import customer
-from functions.customer import (DOCUMENT_ID, sheet_valor, sheet_search_form, sheet_search)
+from functions.customer import (DOCUMENT_ID, sheet_valor, sheet_search, sheet_data)
 from flask import jsonify
 import requests
-from sheets import columnas_data
+
+# FIELDS
+# id, A
+# docType, B
+# name, C
+# docNumber, D
+# phone, E
+# createdAt F
 
 valor = sheet_valor["fila"]
 
 # EXPORT FUNC
-def get_item(id):
+def get_item(doc):
     try:
-        pro = buscarDato(id, columnas_data["doc"])
-        return jsonify(pro)
+        pro = buscarDato(doc, "D")
+        return jsonify(pro), 200
     except requests.exceptions.RequestException as e:
         return jsonify({'error': str(e)}), 500
 
@@ -18,8 +25,8 @@ def get_item(id):
 # Consulta y devuelve toda la informacion de un cliente especifico por su "DOC"
 def buscarDato(value, column_range):
     valo = [
-        { "range": sheet_search_form+"A13","values": [[value]] },
-        { "range": sheet_search_form+"B13","values": [[column_range]] },
+        { "range": sheet_search+"A13","values": [[value]] },
+        { "range": sheet_search+"B13","values": [[column_range]] },
     ]
     result = (
         customer.sheet.values()
@@ -30,23 +37,28 @@ def buscarDato(value, column_range):
         .execute()
     )
     new_value = encontrarCelda(valor)
+    if (new_value == False or new_value == "#N/A"):
+        return jsonify({"error", "No se encontro cliente con el N° de documento"}), 409
 
-    result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search+new_value+":"+new_value).execute()
+    result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_data+new_value+":"+new_value).execute()
     values = result.get('values', [])
     print("Se encontro toda la info: ", values)
     return values
 
 def encontrarCelda(value_search):
-    result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search_form+value_search+"13").execute()
-    values = result.get('values', [])
-    print("Se encontro en la celda: ", values[0][0], flush=True)
-    return values[0][0]
+    try:
+        result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_search+value_search+"13").execute()
+        values = result.get('values', [])
+        print("Se encontro en la celda: ", values[0][0], flush=True)
+        return values[0][0]
+    except:
+        return False
 
 def buscarCelda(value, column_range):
     print(f"Buscando el dato {value} en {column_range}", flush= True)
     valo = [
-        { "range": sheet_search_form+"A13","values": [[value]] },
-        { "range": sheet_search_form+"B13","values": [[column_range]] },
+        { "range": sheet_search+"A13","values": [[value]] },
+        { "range": sheet_search+"B13","values": [[column_range]] },
     ]
     result = (
         customer.sheet.values()

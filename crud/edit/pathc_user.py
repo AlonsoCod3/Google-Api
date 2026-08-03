@@ -2,8 +2,9 @@ from functions import customer
 from flask import jsonify, request
 from crud.get.by_id import (buscarCelda, encontrarCelda)
 import requests
+from datetime import datetime
 
-from functions.customer import (DOCUMENT_ID, sheet_search, sheet_valor)
+from functions.customer import (DOCUMENT_ID, sheet_data, sheet_valor)
 # FIELDS
 # id, A
 # docType, B
@@ -41,26 +42,12 @@ def edit_user(data_values, fila):
     for field in posible_edit:
         print(field, flush=True)
         if field.get("name") in data_values:
-            valo.append({ "range": f'{sheet_search}{field.get("cell")}{fila}',"values": [[data_values[field.get("name")].lower()]] })
-        
-    # if posible_edit in data_values:
-    #     data_values["name"] = data_values.get("name").lower()
-    #     buscarCelda(data_values["name"], "B")
-    #     validateProduct = encontrarCelda(sheet_valor["fila"])
-
-    #     if validateProduct != "#N/A":
-    #         return jsonify({'Error': "No se puede actulizar, nombre ya registrado"}), 500
-    #     valo.append({ "range": f'{sheet_search}{columnas_data["nombre"]}{fila}',"values": [[data_values["name"]]] })
-
-    # if "amount" in data_values:
-    #     valo.append({ "range": f'{sheet_search}{columnas_data["amount"]}{fila}',"values": [[data_values["amount"]]] })
-
-    # if "type" in data_values:
-    #     data_values["type"] = data_values.get("type").lower()
-    #     valo.append({ "range": f'{sheet_search}{columnas_data["type"]}{fila}',"values": [[data_values["type"]]] })
+            valo.append({ "range": f'{sheet_data}{field.get("cell")}{fila}',"values": [[data_values[field.get("name")].lower()]] })
     
-    print(valo, flush=True)
+    updateValue = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    valo.append({ "range": f'{sheet_data}G{fila}',"values": [[updateValue]] })
     print("valores posibles añadidos para actualizar", flush=True)
+    print(valo, flush=True)
 
     try:
         result = (
