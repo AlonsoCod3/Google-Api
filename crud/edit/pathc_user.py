@@ -22,7 +22,7 @@ def edito(id):
         if not data:
             return jsonify({"error": "Missing fields for edit"}), 400
         
-        buscarCelda(id, "D")
+        buscarCelda(id, "A")
         usuario_encontrado = encontrarCelda(sheet_valor["fila"])
         if usuario_encontrado == "#N/A":
             print("Error de usuario no encontrado:", flush=True)
