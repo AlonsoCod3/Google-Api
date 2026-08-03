@@ -4,8 +4,9 @@ from flask import jsonify
 DOCUMENT_ID = "10-XhAKVGEbLTzjN-KDNc5jVi83itkvi5Brda4PVxZp8"
 
 sheet= None
-sheet_search = "Clientes!"
-sheet_search_form = "LOOKUP_SHEET!"
+sheet_data = "Clientes!"
+sheet_search = "LOOKUP_SHEET!"
+sheet_delete = "Clientes_Del"
 sheet_valor = {
     "columna":"B",
     "fila":"C",

@@ -34,9 +34,9 @@ def geto():
 def get():
     return get_all()
 
-@routing.route("/<id>") #GET_ID
-def by_id(id):
-    return get_item(id)
+@routing.route("/<doc>") #GET_ID
+def by_id(doc):
+    return get_item(doc)
 
 @routing.route("/name/<name>") #GET_NAMES
 def get_names(name):
