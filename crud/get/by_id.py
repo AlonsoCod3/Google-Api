@@ -43,7 +43,20 @@ def buscarDato(value, column_range):
     result = customer.sheet.values().get(spreadsheetId=DOCUMENT_ID, range=sheet_data+new_value+":"+new_value).execute()
     values = result.get('values', [])
     print("Se encontro toda la info: ", values)
-    return values
+
+    data_res = []
+    for client in result.get('values'):
+        item = {}
+        item["id"] = client[0]
+        item["docType"] = client[1]
+        item["name"] = client[2]
+        item["docNumber"] = client[3]
+        item["phone"] = client[4]
+        item["createdDate"] = client[5]
+        item["updateDate"] = client[6] if len(client) > 6 else ""
+        data_res.append(item)
+        
+    return data_res
 
 def encontrarCelda(value_search):
     try:
